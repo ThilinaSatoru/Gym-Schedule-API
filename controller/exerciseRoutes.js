@@ -1,14 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const exerciseService = require('../service/exerciseService');
+const log = require('../utils/logger');
 
 // 1. Create a new Exercise (POST)
 router.post("/", async (req, res) => {
     try {
         const exercise = await exerciseService.createExercise(req.body);
         res.status(201).json(exercise);
+        log.bgY("New Exercise Created.");
     } catch (err) {
-        console.error("Error creating exercise", err);
+        log.R("Error creating exercise", err);
         res.status(500).send("Error creating exercise");
     }
 });
@@ -18,8 +20,9 @@ router.get("/", async (req, res) => {
     try {
         const exercises = await exerciseService.getAllExercises();
         res.json(exercises);
+        log.bgG("Get All Exercises.");
     } catch (err) {
-        console.error("Error retrieving exercises", err);
+        log.R("Error retrieving exercises", err);
         res.status(500).send("Error retrieving exercises");
     }
 });
@@ -32,8 +35,9 @@ router.get("/:id", async (req, res) => {
             return res.status(404).send("Exercise not found");
         }
         res.json(exercise);
+        log.bgG("Get Exercise : " + req.params.id);
     } catch (err) {
-        console.error("Error retrieving exercise", err);
+        log.R("Error retrieving exercise", err);
         res.status(500).send("Error retrieving exercise");
     }
 });
@@ -46,8 +50,9 @@ router.put("/:id", async (req, res) => {
             return res.status(404).send("Exercise not found");
         }
         res.json(updatedExercise);
+        log.bgY("Updated Exercise : " + req.params.id);
     } catch (err) {
-        console.error("Error updating exercise", err);
+        log.R("Error updating exercise", err);
         res.status(500).send("Error updating exercise");
     }
 });
@@ -60,8 +65,9 @@ router.delete("/:id", async (req, res) => {
             return res.status(404).send("Exercise not found");
         }
         res.status(204).send(); // No Content
+        log.bgR("Deleted Exercise : " + req.params.id);
     } catch (err) {
-        console.error("Error deleting exercise", err);
+        log.R("Error deleting exercise", err);
         res.status(500).send("Error deleting exercise");
     }
 });
